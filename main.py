@@ -6,20 +6,39 @@ Organization: UNIR
 import os
 import sys
 
+
 DEFAULT_FILENAME = "words.txt"
 DEFAULT_DUPLICATES = False
 DEFAULT_ORDER_ASCENDING = True
 
 
-def sort_list(items, ascending=True):
-    if not isinstance(items, list):
-        raise RuntimeError(f"No puede ordenar {type(items)}")
+def read_words_from_file(file_path):
+    words_set = set()
+    with open(file_path, "r") as file:
+        for line in file:
+            word = line.strip()
+            if word:
+                words_set.add(word)
+    return sorted(words_set)
 
-    return sorted(items, reverse=(not ascending))
+
+def get_word_list(filename=DEFAULT_FILENAME):
+    file_path = os.path.join(".", filename)
+    if os.path.isfile(file_path):
+        return read_words_from_file(file_path)
+    else:
+        print(f"El fichero {filename} no existe")
+        return ["ravenclaw", "gryffindor", "slytherin", "hufflepuff"]
 
 
 def remove_duplicates_from_list(items):
     return list(set(items))
+
+
+def sort_list(items, ascending=True):
+    if not isinstance(items, list):
+        raise RuntimeError(f"No puede ordenar {type(items)}")
+    return sorted(items, reverse=(not ascending))
 
 
 if __name__ == "__main__":
@@ -35,6 +54,7 @@ if __name__ == "__main__":
         print("The file must be specified as the first argument") #= print("Se debe indicar el fichero como primer argumento")
         print("The second argument indicates whether you want to remove duplicates") #= print("El segundo argumento indica si se quieren eliminar duplicados")
         sys.exit(1)
+
 
     print(f"The words of the file {filename} will be read.") #= print(f"Se leerán las palabras del fichero {filename}")
     file_path = os.path.join(".", filename)
